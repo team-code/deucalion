@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["SilverWingedSeraph <lfstindall@gmail.com>"]
 
 [dependencies]
-lua = "*"
+hlua = "*"
 sfml = "0.11.2"
