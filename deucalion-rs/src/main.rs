@@ -14,7 +14,7 @@ fn fake_main() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
     // can be done or reported, so unwrap() will be used here and ONLY here.
     env_logger::init().unwrap();
-    debug!("env_logger has been initialized successfully.");
+    info!("env_logger has been initialized successfully.");
 
     // TODO: Init Lua here.
 
@@ -52,9 +52,12 @@ fn fake_main() -> i32 {
         // events() returns an iterator over all events in the queue.
         for current_event in window.events() {
             if current_event == event::Closed {
-                window.close()
+                window.close();
             }
         }
+
+        // TODO: Change the world's state here.
+
     }
     return 0;
 }
