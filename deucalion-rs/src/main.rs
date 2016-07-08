@@ -9,6 +9,7 @@ use sfml::graphics::RenderWindow;
 use sfml::system::Clock;
 
 mod engine_config;
+mod direction;
 
 fn fake_main() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
@@ -57,6 +58,7 @@ fn fake_main() -> i32 {
         }
 
         // TODO: Change the world's state here.
+
 
     }
     return 0;
