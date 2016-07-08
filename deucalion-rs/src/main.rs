@@ -3,8 +3,10 @@ extern crate sfml;
 extern crate log;
 extern crate env_logger;
 
-use sfml::window::{ContextSettings, VideoMode, window_style, event};
+use sfml::window::{ContextSettings, VideoMode, window_style};
+use sfml::window::event;
 use sfml::graphics::RenderWindow;
+use sfml::system::Clock;
 
 mod engine_config;
 
@@ -44,6 +46,16 @@ fn fake_main() -> i32 {
     // Set the game's maximum framerate.
     window.set_framerate_limit(engine_config.maximum_framerate);
 
+    // Set up a clock to keep track of how long frames take.
+    let frame_clock = Clock::new();
+    while window.is_open() {
+        // events() returns an iterator over all events in the queue.
+        for current_event in window.events() {
+            if current_event == event::Closed {
+                window.close()
+            }
+        }
+    }
     return 0;
 }
 
