@@ -1,5 +1,6 @@
 //! Functions for managing and acquiring engine configuration
-
+use error::DeucalionError;
+use scripting::{execute_script, Lua};
 // TODO: Make this work with the Lua subsystem.
 
 /// A datastructure containing configuration details for the engine
@@ -13,10 +14,63 @@ pub struct EngineConfig {
     pub maximum_framerate: u32,
 }
 
-/// Acquire the engine's configuration. Currently this is arbitrary defaults; in
-/// the future, it will be from a Lua script.
-pub fn get_engine_config() -> Result<EngineConfig, String> {
-    Ok(get_default_engine_config())
+/// Acquire the engine's configuration. If acquiring it from data/engine_config.lua fails,
+/// this function will return the default configuration, which will typically work for every
+/// configuration.
+pub fn get_engine_config(environment: &mut Lua) -> EngineConfig {
+    let path = "data/engine_config.lua";
+    match execute_script(environment, path) {
+        Ok(v) => {
+            match get_engine_config_from_environment(environment) {
+                Ok(w) => {
+                    info!("Succesfully acquired engine config at {}", path);
+                    trace!("Engine config is {:?}", w);
+                    w // This is the valid EngineConfig struct built from the script
+                }
+                Err(e) => {
+                    error!("Failed to acquire engine config from script at {}: {}",
+                           path,
+                           e);
+                    get_default_engine_config()
+                }
+            }
+        }
+        Err(e) => {
+            error!("Failed to run engine config script at {}: {}", path, e);
+            get_default_engine_config()
+        }
+    }
+}
+
+/// Check variables in the Lua environment, bringing their values into an EngineConfig struct
+fn get_engine_config_from_environment(environment: &mut Lua) -> Result<EngineConfig, DeucalionError> {
+    // Here, we have a set of match expressions that attempt to fetch the global config variables.
+    // At some point, this action (extract Lua global or error) should be abstracted into a macro
+    let screen_width = match environment.get("SCREEN_WIDTH") {
+        Some(v) => v,
+        None => {
+            return Err(DeucalionError::from("SCREEN_WIDTH is not defined or is the wrong type"));
+        }
+    };
+    let screen_height = match environment.get("SCREEN_HEIGHT") {
+        Some(v) => v,
+        None => {
+            return Err(DeucalionError::from("SCREEN_HEIGHT is not defined or is the wrong type"));
+        }
+    };
+    let maximum_framerate = match environment.get("MAXIMUM_FRAMERATE") {
+        Some(v) => v,
+        None => {
+            return Err(DeucalionError::from("MAXIMUM_FRAMERATE is not defined or is the wrong \
+                                             type"));
+        }
+    };
+    // Simply build the EngineConfig struct. Making it to this point means the config is O.K.
+    Ok(EngineConfig {
+        screen_height: screen_height,
+        screen_width: screen_width,
+        maximum_framerate: maximum_framerate,
+    })
 }
 
 /// Get the engine's default configuration state. This cannot fail.
