@@ -14,10 +14,10 @@ impl Direction {
     /// clockwise
     pub fn to_angle(self) -> usize {
         match self {
-            Up => 0,
-            Down => 180,
-            Left => 270,
-            Right => 90,
+            Direction::Up => 0,
+            Direction::Down => 180,
+            Direction::Left => 270,
+            Direction::Right => 90,
         }
     }
 }
