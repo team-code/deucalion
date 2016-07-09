@@ -1,6 +1,6 @@
 //! Provides the Direction enum and utilities for working with it
 
-/// Represents any of the four cardinal directions.
+/// Represents the four cardinal directions.
 #[derive(PartialEq, Eq, Debug, Copy, Clone)]
 pub enum Direction {
     Up,
@@ -18,6 +18,16 @@ impl Direction {
             Direction::Down => 180,
             Direction::Left => 270,
             Direction::Right => 90,
+        }
+    }
+
+    /// Return the inverse of the current direction, Down->Up, Left->Right, etc.
+    pub fn reverse(self) -> Direction {
+        match self {
+            Direction::Up => Direction::Down,
+            Direction::Down => Direction::Up,
+            Direction::Left => Direction::Right,
+            Direction::Right => Direction::Left,
         }
     }
 }
