@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 extern crate sfml;
 #[macro_use]
 extern crate log;
