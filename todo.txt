@@ -1,2 +1,0 @@
-Do persistence via NEAM
-https://github.com/tim42/persistence
