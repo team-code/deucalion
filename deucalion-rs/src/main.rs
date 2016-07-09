@@ -11,26 +11,25 @@ use sfml::window::event;
 use sfml::graphics::RenderWindow;
 use sfml::system::Clock;
 
-mod engine_config;
+mod error;
+
+mod config;
 mod utility;
 mod scripting;
 
-fn fake_main() -> i32 {
+use config::engine_config;
+
+fn fake_main<'engine>() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
-    // can be done or reported, so unwrap() will be used here and ONLY here.
+    // can be done or reported, so unwrap() will be used here.
     env_logger::init().unwrap();
     info!("env_logger has been initialized successfully.");
 
-    // TODO: Init Lua here.
+    // Init the scripting subsystem
+    let mut engine_scripting_environment = scripting::get_scripting_environment();
 
     // Acquire the engine configuration. Failing this is a fatal error.
-    let engine_config = match engine_config::get_engine_config() {
-        Ok(config) => config,
-        Err(error) => {
-            error!("Failed to acquire engine configuration:\n\t{}", error);
-            return 1;
-        }
-    };
+    let engine_config = engine_config::get_engine_config(&mut engine_scripting_environment);
 
     // TODO: Init the game state here.
 
