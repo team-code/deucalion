@@ -16,9 +16,14 @@ pub struct EngineConfig {
 /// Acquire the engine's configuration. Currently this is arbitrary defaults; in
 /// the future, it will be from a Lua script.
 pub fn get_engine_config() -> Result<EngineConfig, String> {
-    Ok(EngineConfig {
+    Ok(get_default_engine_config())
+}
+
+/// Get the engine's default configuration state. This cannot fail.
+fn get_default_engine_config() -> EngineConfig {
+    EngineConfig {
         screen_width: 640,
         screen_height: 480,
         maximum_framerate: 60,
-    })
+    }
 }

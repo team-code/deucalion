@@ -11,9 +11,11 @@ use sfml::window::event;
 use sfml::graphics::RenderWindow;
 use sfml::system::Clock;
 
-mod engine_config;
+mod config;
 mod utility;
 mod scripting;
+
+use config::engine_config;
 
 fn fake_main() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
