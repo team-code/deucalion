@@ -4,6 +4,7 @@ extern crate sfml;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
+extern crate hlua;
 
 use sfml::window::{ContextSettings, VideoMode, window_style};
 use sfml::window::event;
@@ -12,6 +13,7 @@ use sfml::system::Clock;
 
 mod engine_config;
 mod utility;
+mod scripting;
 
 fn fake_main() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
