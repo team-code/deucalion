@@ -1,13 +1,46 @@
+sudo: false
+env:
+  global:
+    - LD_LIBRARY_PATH=/home/travis/build/team-code/deucalion-rs/sfml_install/usr/local/lib
 language: rust
-
 rust:
   - nightly
-
-sudo: required
-
-before_install:
-  - sudo echo "deb http://archive.ubuntu.com/ubuntu/ xenial-proposed restricted main multiverse universe" >> /etc/apt/sources.list
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libsfml-dev libcsfml-dev
-
-script: cd deucalion-rs && cargo build && cargo test
+script:
+  # Build the SFML from source >:(
+  - mkdir sfml_install
+  - wget http://www.sfml-dev.org/files/SFML-2.3.2-sources.zip --no-check-certificate
+  - unzip -q SFML-2.3.2-sources.zip
+  - pushd SFML-2.3.2 && mkdir build && cd build && cmake .. && make
+  - make DESTDIR=/home/travis/build/jeremyletang/rust-sfml/sfml_install install
+  - popd
+  - wget http://www.sfml-dev.org/files/CSFML-2.3-sources.zip --no-check-certificate
+  - unzip -q CSFML-2.3-sources.zip
+  - pushd CSFML-2.3
+  - mkdir cmake/Modules
+  - cp /home/travis/build/team-code/deucalion-rs/sfml_install/usr/local/share/SFML/cmake/Modules/FindSFML.cmake cmake/Modules
+  - mkdir build && cd build && cmake -DCMAKE_MODULE_PATH=/home/travis/build/team-code/deucalion-rs/CSFML-2.3/cmake/Modules -DSFML_ROOT=/home/travis/build/jeremyletang/rust-sfml/sfml_install/usr/local .. && make
+  - make DESTDIR=/home/travis/build/team-code/deucalion-rs/sfml_install install
+  - popd
+  - cd deucalion-rs
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo doc --verbose
+addons:
+  apt:
+    packages:
+    - libpthread-stubs0-dev
+    - libgl1-mesa-dev
+    - libx11-dev
+    - libx11-xcb-dev
+    - libxcb-image0-dev
+    - libxrandr-dev
+    - libxcb-randr0-dev
+    - libudev-dev
+    - libfreetype6-dev
+    - libglew-dev
+    - libjpeg8-dev
+    - libgpgme11-dev
+    - libsndfile1-dev
+    - libopenal-dev
+    - libjpeg62
+    - cmake
