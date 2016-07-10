@@ -6,7 +6,8 @@ rust:
 sudo: required
 
 before_install:
+  - sudo add-apt-repository ppa:sonkun/sfml-stable -y
   - sudo apt-get -qq update
-  - sudo apt-get install -y libsfml-dev libcsfml-dev
+  - sudo apt-get install -y sfml csfml
 
 script: cd deucalion-rs && cargo build && cargo test
