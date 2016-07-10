@@ -6,8 +6,8 @@ rust:
 sudo: required
 
 before_install:
-  - sudo add-apt-repository ppa:sonkun/sfml-stable -y
+  - sudo echo "deb http://archive.ubuntu.com/ubuntu/ xenial-proposed restricted main multiverse universe" >> /etc/apt/sources.list
   - sudo apt-get -qq update
-  - sudo apt-get install -y sfml csfml
+  - sudo apt-get install -y libsfml-dev libcsfml-dev
 
 script: cd deucalion-rs && cargo build && cargo test
