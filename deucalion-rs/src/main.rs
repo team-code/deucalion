@@ -17,6 +17,7 @@ mod error;
 mod config;
 mod utility;
 mod scripting;
+mod resource;
 
 use config::engine_config;
 

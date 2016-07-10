@@ -1,6 +1,7 @@
 //! Functions for managing and acquiring engine configuration
 use error::DeucalionError;
 use scripting::{execute_script, Lua};
+use resource;
 // TODO: Make this work with the Lua subsystem.
 
 /// A datastructure containing configuration details for the engine
@@ -18,25 +19,41 @@ pub struct EngineConfig {
 /// this function will return the default configuration, which will typically work for every
 /// configuration.
 pub fn get_engine_config(environment: &mut Lua) -> EngineConfig {
-    let path = "data/engine_config.lua";
-    match execute_script(environment, path) {
-        Ok(v) => {
+    let path =
+        match resource::loading::get_resource_path_by_name(resource::ResourceKind::EngineConfig,
+                                                           "") {
+            Ok(v) => v,
+            Err(e) => {
+                // If the engine config's path can't be generated, it certainly can't be loaded.
+                error!("Failed to generate the path for the engine configuration script: {}",
+                       e);
+                return get_default_engine_config();
+            }
+        };
+
+    // Syntax monster explaination for the &* in the second argument to execute_script:
+    //  to_string_lossy returns a Cow<str>, which we dereference to str and then borrow to &str
+    match execute_script(environment, &*path.to_string_lossy()) {
+        Ok(_) => {
             match get_engine_config_from_environment(environment) {
                 Ok(w) => {
-                    info!("Succesfully acquired engine config at {}", path);
+                    info!("Succesfully acquired engine config at {}",
+                          path.to_string_lossy());
                     trace!("Engine config is {:?}", w);
                     w // This is the valid EngineConfig struct built from the script
                 }
                 Err(e) => {
                     error!("Failed to acquire engine config from script at {}: {}",
-                           path,
+                           path.to_string_lossy(),
                            e);
                     get_default_engine_config()
                 }
             }
         }
         Err(e) => {
-            error!("Failed to run engine config script at {}: {}", path, e);
+            error!("Failed to run engine config script at {}: {}",
+                   path.to_string_lossy(),
+                   e);
             get_default_engine_config()
         }
     }
