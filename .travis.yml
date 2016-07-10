@@ -1,5 +1,6 @@
 sudo: false
 
+# This may need to change at some point
 notifications:
   email: change
 
@@ -13,7 +14,8 @@ rust:
   - nightly
 
 cache:
-  - /home/travis/build/team-code/deucalion/sfml_install
+  - directories:
+    - /home/travis/build/team-code/deucalion/sfml_install
   - cargo
 
 script:
