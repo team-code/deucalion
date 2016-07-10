@@ -3,4 +3,10 @@ language: rust
 rust:
   - nightly
 
-script: cd deucalion-rs && cargo build && cargo test
+sudo: required
+
+before-install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libsfml-dev libcsfml-dev
+
+script: apt-get install cd deucalion-rs && cargo build && cargo test
