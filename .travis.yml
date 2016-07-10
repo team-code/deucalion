@@ -17,7 +17,7 @@ cache:
 
 script:
   # Build the SFML from source >:(
-  - if [ ! -d sfml_install ]; then ./buildsfml.sh; fi
+  - if [ ! -d sfml_install ]; then ./build_sfml.sh; fi
   # Move the cargo config hooks
   - mkdir .cargo
   - mv .travis.cargo.config .cargo/config
