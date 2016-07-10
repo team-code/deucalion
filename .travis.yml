@@ -1,0 +1,5 @@
+language: rust
+rust:
+  - nightly
+
+script: cd deucalion-rs && cargo build && cargo test
