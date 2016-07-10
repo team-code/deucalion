@@ -5,6 +5,7 @@ extern crate sfml;
 extern crate log;
 extern crate env_logger;
 extern crate hlua;
+extern crate tiled;
 
 use sfml::window::{ContextSettings, VideoMode, window_style};
 use sfml::window::event;

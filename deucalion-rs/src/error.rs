@@ -5,11 +5,13 @@ use std::error::Error;
 use std::fmt;
 use std::io;
 use hlua;
+use tiled;
 
 #[derive(Debug)]
 pub enum DeucalionError {
     IoError(io::Error),
     LuaError(hlua::LuaError),
+    TiledError(tiled::TiledError),
     OtherError(String),
 }
 
@@ -43,6 +45,7 @@ impl Error for DeucalionError {
         match *self {
             DeucalionError::IoError(ref err) => err.description(),
             DeucalionError::LuaError(_) => "There was an error in Lua code.",
+            DeucalionError::TiledError(ref err) => err.description(),
             DeucalionError::OtherError(ref string) => string.as_ref(),
         }
     }
@@ -52,6 +55,8 @@ impl Error for DeucalionError {
             // LuaError doesn't currently implement Error. If it ever does,
             //  this can be changed to be more useful.
             DeucalionError::LuaError(_) => None,
+            // TiledError currently doesn't implement Error.
+            DeucalionError::TiledError(ref err) => Some(err as &Error),
             DeucalionError::OtherError(_) => None,
         }
     }
@@ -64,6 +69,7 @@ impl fmt::Display for DeucalionError {
             // Currently, LuaError doesn't implement Display. If it ever does,
             //  this can be changed in order to be more useful
             DeucalionError::LuaError(_) => Err(fmt::Error),
+            DeucalionError::TiledError(ref err) => fmt::Display::fmt(err, f),
             DeucalionError::OtherError(ref string) => fmt::Display::fmt(string, f),
         }
     }
