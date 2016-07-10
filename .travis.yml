@@ -5,6 +5,8 @@ env:
 language: rust
 rust:
   - nightly
+cache:
+  - /home/travis/build/team-code/deucalion/sfml_install
 script:
   # Build the SFML from source >:(
   - mkdir sfml_install
