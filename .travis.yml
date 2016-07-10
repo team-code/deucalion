@@ -14,8 +14,6 @@ rust:
   - nightly
 
 cache:
-  - directories:
-    - /home/travis/build/team-code/deucalion/sfml_install
   - cargo
 
 script:
