@@ -9,9 +9,16 @@ use tiled;
 
 #[derive(Debug)]
 pub enum DeucalionError {
+    /// An error in I/O caused this error
     IoError(io::Error),
+    /// An error in a script caused this error
     LuaError(hlua::LuaError),
+    /// A problem with tilemaps caused this error
     TiledError(tiled::TiledError),
+    /// Some functionality that is not yet implemented was called, causing this error.
+    /// Note that there is not ::from that creates this error; it must be created explicitly.
+    NotImplementedError(String),
+    /// Something else bad happened.
     OtherError(String),
 }
 
@@ -24,6 +31,12 @@ impl From<io::Error> for DeucalionError {
 impl From<hlua::LuaError> for DeucalionError {
     fn from(err: hlua::LuaError) -> DeucalionError {
         DeucalionError::LuaError(err)
+    }
+}
+
+impl From<tiled::TiledError> for DeucalionError {
+    fn from(err: tiled::TiledError) -> DeucalionError {
+        DeucalionError::TiledError(err)
     }
 }
 
@@ -46,6 +59,7 @@ impl Error for DeucalionError {
             DeucalionError::IoError(ref err) => err.description(),
             DeucalionError::LuaError(_) => "There was an error in Lua code.",
             DeucalionError::TiledError(ref err) => err.description(),
+            DeucalionError::NotImplementedError(ref string) => string.as_ref(),
             DeucalionError::OtherError(ref string) => string.as_ref(),
         }
     }
@@ -57,6 +71,7 @@ impl Error for DeucalionError {
             DeucalionError::LuaError(_) => None,
             // TiledError currently doesn't implement Error.
             DeucalionError::TiledError(ref err) => Some(err as &Error),
+            DeucalionError::NotImplementedError(_) => None,
             DeucalionError::OtherError(_) => None,
         }
     }
@@ -70,6 +85,7 @@ impl fmt::Display for DeucalionError {
             //  this can be changed in order to be more useful
             DeucalionError::LuaError(_) => Err(fmt::Error),
             DeucalionError::TiledError(ref err) => fmt::Display::fmt(err, f),
+            DeucalionError::NotImplementedError(ref string) => fmt::Display::fmt(string, f),
             DeucalionError::OtherError(ref string) => fmt::Display::fmt(string, f),
         }
     }
