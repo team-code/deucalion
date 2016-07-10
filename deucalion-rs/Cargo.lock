@@ -6,7 +6,7 @@ dependencies = [
  "hlua 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "sfml 0.11.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "tiled 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tiled 0.1.5 (git+https://github.com/mattyhall/rs-tiled.git)",
 ]
 
 [[package]]
@@ -216,7 +216,7 @@ dependencies = [
 [[package]]
 name = "tiled"
 version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/mattyhall/rs-tiled.git#64e2472d5c4c64f672c57c80d802426198d7ac5a"
 dependencies = [
  "base64 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "flate2 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
