@@ -1,14 +1,20 @@
 sudo: false
+
 env:
   global:
   - LD_LIBRARY_PATH=/home/travis/build/team-code/deucalion/sfml_install/usr/local/lib
+
 language: rust
+
 rust:
   - nightly
+
 cache:
   - /home/travis/build/team-code/deucalion/sfml_install
+
 script:
   # Build the SFML from source >:(
+  - if [ ! -d sfml_install ] then
   - mkdir sfml_install
   - wget http://www.sfml-dev.org/files/SFML-2.3.2-sources.zip --no-check-certificate
   - unzip -q SFML-2.3.2-sources.zip
@@ -23,12 +29,14 @@ script:
   - mkdir build && cd build && cmake -DCMAKE_MODULE_PATH=/home/travis/build/team-code/deucalion/CSFML-2.3/cmake/Modules -DSFML_ROOT=/home/travis/build/team-code/deucalion/sfml_install/usr/local .. && make
   - make DESTDIR=/home/travis/build/team-code/deucalion/sfml_install install
   - popd
+  - fi
   # Move the cargo config hooks
   - mkdir .cargo
   - mv .travis.cargo.config .cargo/config
   # Actually do the CI build.
   - cd deucalion-rs
   - cargo build --verbose && cargo test --verbose && cargo doc --verbose
+
 addons:
   apt:
     packages:
