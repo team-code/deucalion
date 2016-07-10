@@ -1,7 +1,7 @@
 sudo: false
 env:
   global:
-    - LD_LIBRARY_PATH=/home/travis/build/team-code/deucalion/sfml_install/usr/local/lib
+  - LD_LIBRARY_PATH=/home/travis/build/team-code/deucalion/sfml_install/usr/local/lib
 language: rust
 rust:
   - nightly
@@ -21,10 +21,12 @@ script:
   - mkdir build && cd build && cmake -DCMAKE_MODULE_PATH=/home/travis/build/team-code/deucalion/CSFML-2.3/cmake/Modules -DSFML_ROOT=/home/travis/build/team-code/deucalion/sfml_install/usr/local .. && make
   - make DESTDIR=/home/travis/build/team-code/deucalion/sfml_install install
   - popd
+  # Move the cargo config hooks
+  - mkdir .cargo
+  - mv .travis.cargo.config .cargo/config
+  # Actually do the CI build.
   - cd deucalion-rs
-  - cargo build --verbose
-  - cargo test --verbose
-  - cargo doc --verbose
+  - cargo build --verbose && cargo test --verbose && cargo doc --verbose
 addons:
   apt:
     packages:
