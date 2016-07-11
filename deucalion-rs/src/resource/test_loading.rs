@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use resource::loading::*;
 use resource::ResourceKind;
 use std::path::PathBuf;
@@ -8,8 +9,8 @@ use std::fs::File;
 #[test]
 // Make sure that get_resource_path_by_name can properly generate the names for maps
 fn test_map_path() {
-    let correct_path = PathBuf::from("./data/maps/Map001/");
-    let result = match get_resource_path_by_name(ResourceKind::Map, "Map001") {
+    let correct_path = PathBuf::from("./data/maps/map001/map001.tmx");
+    let result = match get_resource_path_by_name(ResourceKind::Map, "map001") {
         Ok(v) => v,
         Err(e) => panic!("Error: {}", e),
     };
