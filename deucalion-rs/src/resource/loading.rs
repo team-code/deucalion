@@ -21,12 +21,23 @@ pub fn get_resource_path_by_name(kind: ResourceKind,
                                  name: &str)
                                  -> Result<PathBuf, DeucalionError> {
     // Everything is in the data directory.
-    let path = Path::new(".").join("data");
+    let mut path = Path::new(".").join("data");
     match kind {
         // maps are stored at data/maps/<name>/
-        ResourceKind::Map => Ok(path.join("maps").join(name)),
-        // Engine configuration is only ever stored in one place, so name is pretty pointless.
+        ResourceKind::Map => {
+            // Select maps directory
+            path.push("maps");
+            // Select specific map directory
+            path.push(name);
+            // Select the file
+            path.push(name);
+            path.set_extension("tmx");
+            // Done!
+            Ok(path)
+        }
+        // Game and engine configurations are always in the same place
         ResourceKind::EngineConfig => Ok(path.join("engine_config.lua")),
+        ResourceKind::GameConfig => Ok(path.join("game_config.lua")),
         _ => {
             Err(DeucalionError::NotImplementedError(String::from("Currently, this kind \
                                                                          of resource isn't \
