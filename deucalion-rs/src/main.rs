@@ -51,6 +51,11 @@ fn fake_main<'engine>() -> i32 {
     // Set the game's maximum framerate.
     window.set_framerate_limit(engine_config.maximum_framerate);
 
+    // Load the initial map into memory. This should go somewhere else later, but that design work
+    // has not yet been done.
+
+    let current_map = resource::map::get_map_by_name(&game_config.starting_map);
+
     // Set up a clock to keep track of how long frames take.
     let frame_clock = Clock::new();
     while window.is_open() {
