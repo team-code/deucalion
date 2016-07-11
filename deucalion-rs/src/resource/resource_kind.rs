@@ -14,4 +14,6 @@ pub enum ResourceKind {
     Character,
     /// Engine configuration files
     EngineConfig,
+    /// Game configuration
+    GameConfig,
 }
