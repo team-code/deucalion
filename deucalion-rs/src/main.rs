@@ -19,8 +19,6 @@ mod utility;
 mod scripting;
 mod resource;
 
-use config::engine_config;
-
 fn fake_main<'engine>() -> i32 {
     // Init'ing the log system is the first thing to try. Without it, nothing else
     // can be done or reported, so unwrap() will be used here.
@@ -30,17 +28,18 @@ fn fake_main<'engine>() -> i32 {
     // Init the scripting subsystem
     let mut engine_scripting_environment = scripting::get_scripting_environment();
 
-    // Acquire the engine configuration. Failing this is a fatal error.
-    let engine_config = engine_config::get_engine_config(&mut engine_scripting_environment);
+    // Acquire the engine configuration.
+    let engine_config = config::engine_config::get_engine_config(&mut engine_scripting_environment);
 
-    // TODO: Init the game state here.
+    // Acquire the game's configuration.
+    let game_config = config::game_config::get_game_config(&mut engine_scripting_environment);
 
     // Initialize the game window. If this can't be done, there's really no point in
     // continuing on.
     let mut window = match RenderWindow::new(VideoMode::new_init(engine_config.screen_width,
                                                                  engine_config.screen_height,
                                                                  32),
-                                             "Game Title",
+                                             &game_config.title,
                                              window_style::CLOSE,
                                              &ContextSettings::default()) {
         Some(window) => window,
