@@ -9,3 +9,7 @@ Deucalion natively supports the Tiled map editor's TMX map format (using the til
 Deucalion is currently a PROTOTYPE and should not be used - this page exists to reserve the name and allow people to assist with debugging/testing. If you would like a pre-alpha copy, please contact me and I will be more than happy to provide one!
 
 Linux is Deucalion's first class platform, but it will fully support Mac OS X and Windows before its 1.0 release (probably in that order, for technical reasons).
+
+Main contributors:
+  SilverWingedSeraph: https://github.com/SilverWingedSeraph
+  Arces: https://github.com/arces
