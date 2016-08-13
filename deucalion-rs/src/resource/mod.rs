@@ -6,6 +6,8 @@ mod resource_kind;
 pub use resource::resource_kind::ResourceKind;
 
 pub mod loading;
+pub mod repository;
+mod test_repository;
 
 // Imports to run unit tests
 mod test_map;
