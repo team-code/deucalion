@@ -4,8 +4,9 @@ version = "0.1.0"
 authors = ["SilverWingedSeraph <lfstindall@gmail.com>"]
 
 [dependencies]
-hlua = "*"
-sfml = "0.11.2"
-log = "*"
-env_logger = "*"
-tiled = { git = "https://github.com/mattyhall/rs-tiled.git" }
+hlua = "0.3"
+sfml = "0.12"
+log = "0.3"
+env_logger = "0.4.3"
+tiled = "0.6.0"
+update_rate = "1"

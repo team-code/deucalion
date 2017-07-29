@@ -7,10 +7,11 @@ extern crate env_logger;
 extern crate hlua;
 extern crate tiled;
 
-use sfml::window::{ContextSettings, VideoMode, window_style};
-use sfml::window::event;
-use sfml::graphics::RenderWindow;
-use sfml::system::Clock;
+use sfml::window::{ContextSettings, VideoMode};
+use sfml::window::style as window_style;
+use sfml::window::Event;
+use sfml::graphics::{RenderWindow, RenderTarget};
+use sfml::graphics::Color;
 
 mod error;
 
@@ -36,12 +37,12 @@ fn fake_main<'engine>() -> i32 {
 
     // Initialize the game window. If this can't be done, there's really no point in
     // continuing on.
-    let mut window = match RenderWindow::new(VideoMode::new_init(engine_config.screen_width,
-                                                                 engine_config.screen_height,
-                                                                 32),
-                                             &game_config.title,
-                                             window_style::CLOSE,
-                                             &ContextSettings::default()) {
+    let mut window = match RenderWindow::new(
+        VideoMode::new(engine_config.screen_width, engine_config.screen_height, 32),
+        &game_config.title,
+        window_style::CLOSE,
+        &ContextSettings::default(),
+    ) {
         Some(window) => window,
         None => {
             error!("Could not init a RenderWindow. There is likely a problem with your system.");
@@ -53,22 +54,24 @@ fn fake_main<'engine>() -> i32 {
 
     // Load the initial map into memory. This should go somewhere else later, but that design work
     // has not yet been done.
-
     let current_map = resource::map::get_map_by_name(&game_config.starting_map);
 
-    // Set up a clock to keep track of how long frames take.
-    let frame_clock = Clock::new();
     while window.is_open() {
-        // events() returns an iterator over all events in the queue.
-        for current_event in window.events() {
-            if current_event == event::Closed {
+        // poll_event() returns Some(e) if there's an event to look at
+
+        while let Some(current_event) = window.poll_event() {
+            if current_event == Event::Closed {
                 window.close();
             }
         }
 
+        // Clear the window to ready it for rendering
+        window.clear(&Color::black());
+
         // TODO: Change the world's state here.
 
-
+        // Present the new frame to the user
+        window.display();
     }
     return 0;
 }

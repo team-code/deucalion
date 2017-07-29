@@ -1,6 +1,6 @@
 //! Basic operations on the Lua context, such as creation, destruction, etc
 use hlua::Lua;
-use hlua::any::AnyLuaValue;
+use hlua::AnyLuaValue;
 use error::DeucalionError;
 
 /// Do all required work to initialize a game's Lua context.
@@ -18,9 +18,10 @@ pub fn get_scripting_environment<'environment>() -> Lua<'environment> {
 
 /// Execute a script from a file, returning whatever that script returns. If no data is expected,
 /// that return value can be safely ignored.
-pub fn execute_script(environment: &mut Lua,
-                      filename: &str)
-                      -> Result<AnyLuaValue, DeucalionError> {
+pub fn execute_script(
+    environment: &mut Lua,
+    filename: &str,
+) -> Result<AnyLuaValue, DeucalionError> {
     use std::fs::File;
     use std::io::prelude::*;
     // Open the file
